@@ -51,11 +51,12 @@ CUSTOM_APPS = [
     'parent_users.apps.ParentUserConfig',
     'common.apps.CommonConfig',
     'child_users.apps.ChildUsersConfig',
+    'reward_calendar.apps.RewardCalendarConfig',
 ]
 
 THIRD_PARTY_APPS = [
     'rest_framework', 'drf_yasg',
-    'corsheaders',
+    'corsheaders','rest_framework.authtoken',
 ]
 
 INSTALLED_APPS = SYSTEM_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
@@ -169,9 +170,16 @@ if NGROK_ORIGIN:
 CSRF_TRUSTED_ORIGINS = [
     "https://localhost:8000",
     "https://localhost:8080",
+    "http://localhost:5173",
 ]
 if NGROK_ORIGIN:
     CSRF_TRUSTED_ORIGINS.append(NGROK_ORIGIN)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 개발용
+SESSION_COOKIE_SAMESITE = 'Lax'  # 또는 'None'
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'  # 개발용
+CSRF_COOKIE_SECURE = False    # 개발용
