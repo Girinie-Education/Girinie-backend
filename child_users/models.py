@@ -29,3 +29,17 @@ class ChildUser(CommonModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def save(self, *args, **kwargs):
+        levels = [
+            self.order_level,
+            self.manners_level,
+            self.selfcare_level,
+            self.clean_level,
+            self.calm_level,
+            self.kindness_level,
+            self.saving_level,
+            self.eating_level,
+        ]
+        self.average_level = round(sum(levels) / len(levels), 2)
+        super().save(*args, **kwargs)
