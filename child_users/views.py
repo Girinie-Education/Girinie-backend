@@ -44,11 +44,17 @@ class ChildUserDetailView(APIView):
 
     @swagger_auto_schema(
         operation_summary="단일 자녀 조회",
-        operation_description="자녀 ID를 통해 하나의 자녀 정보를 조회합니다 (부모 소유만 가능).",
+        operation_description="자녀 ID를 통해 하나의 자녀 정보를 조회합니다 (부모 소유만 가능).\
+        부모의 모든 자녀 조회 후, 자녀의 ID를 통해 상세 정보 조회 가능.",
         manual_parameters=[
             openapi.Parameter('pk', openapi.IN_PATH, description="자녀 ID", type=openapi.TYPE_INTEGER),
         ],
-        responses={200: ChildUserSerializer}
+        responses={
+            200: openapi.Response(
+                description="단일 자녀 조회 성공",
+                schema=ChildUserSerializer()
+            )
+        }
     )
     def get(self, request, pk):
         child = get_object_or_404(ChildUser, pk=pk, parent=request.user)
