@@ -30,6 +30,17 @@ class RewardCalendarDayView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     @swagger_auto_schema(
+        operation_summary="자녀 칭찬 전체 조회",
+        operation_description="특정 자녀에게 연결된 모든 칭찬 데이터를 조회합니다.",
+        responses={200: RewardCalendarSerializer(many=True)}
+    )
+    def get(self, request, child_id):
+        child = get_object_or_404(ChildUser, id=child_id, parent=request.user)
+        rewards = RewardCalendar.objects.filter(child=child).order_by('date')
+        serializer = RewardCalendarSerializer(rewards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
         operation_summary="자녀 칭찬 추가",
         operation_description="특정 자녀에게 날짜, 스티커 종류, 메시지를 입력하여 칭찬을 등록합니다.",
         request_body=RewardCalendarSerializer,

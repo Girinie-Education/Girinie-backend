@@ -22,5 +22,10 @@ class RewardCalendar(CommonModel):
     sticker_type = models.PositiveSmallIntegerField(choices=STICKER_CHOICES)
     message = models.CharField(max_length=255, blank=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['child', 'date'], name='unique_reward_per_day_per_child')
+        ]
+
     def __str__(self):
         return f"{self.child.name} - {self.date} - {self.get_sticker_type_display()}"
