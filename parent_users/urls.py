@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import LoginView, LogoutView, UserCreateView, UserDeleteView
+from .views import LoginView, LogoutView, ParentUserView, ParentUserDetailView
 urlpatterns = [
     path("login/", LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('', UserCreateView.as_view(), name='signup'),
-    path('me/', UserDeleteView.as_view(), name='delete-account'),
+    path('', ParentUserView.as_view(), name='signup, list-users'),
+    path('me/', ParentUserDetailView.as_view(), name='parent-user-detail'),
 ]
