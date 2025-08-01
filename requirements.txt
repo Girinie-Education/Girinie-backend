@@ -4,3 +4,7 @@ python-dotenv
 djangorestframework
 drf-yasg
 django-cors-headers
+openai==0.28.1
+urllib3<2.0
+pandas
+openpyxl

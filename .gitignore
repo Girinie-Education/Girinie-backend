@@ -27,3 +27,10 @@ Thumbs.db
 
 ## environment variables
 .env
+
+## amazon
+.amazonq
+
+## docs
+#.guideline
+edu-lifestyle-korea.xlsx
