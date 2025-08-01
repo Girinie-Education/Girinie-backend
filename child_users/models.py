@@ -27,6 +27,8 @@ class ChildUser(CommonModel):
 
     average_level = models.FloatField(default=0.0)
 
+    streak = models.PositiveSmallIntegerField(default=0)  # 연속 일수
+
     def __str__(self):
         return f"{self.name}"
 
