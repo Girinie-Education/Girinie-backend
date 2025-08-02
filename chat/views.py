@@ -8,6 +8,7 @@ from .models import ChatSession, ChatMessage
 from .serializers import ChatSessionSerializer, ChatMessageSerializer
 from .services import ChatService
 from child_users.models import ChildUser
+from logs.models import LevelUpLog
 
 chat_service = ChatService()
 
@@ -126,6 +127,26 @@ class ChatMessageView(APIView):
         if chat_service.check_level_up(session):
             new_level = chat_service.level_up_child(session.child, session.category)
             level_up_message = f"🎉 축하해요! {session.get_category_display()} 레벨이 {new_level}로 올랐어요!"
+            
+            # 그날 첫 레벨업인지 확인
+            from django.utils import timezone
+            today = timezone.now().date()
+            is_first_levelup_today = not LevelUpLog.objects.filter(
+                child=session.child,
+                created_at__date=today
+            ).exists()
+            
+            # 레벨업 로그 저장
+            LevelUpLog.objects.create(
+                child=session.child,
+                category=session.category,
+                level=new_level
+            )
+            
+            # 그날 첫 레벨업이면 streak 증가
+            if is_first_levelup_today:
+                session.child.streak += 1
+                session.child.save()
             
             ChatMessage.objects.create(
                 session=session,
