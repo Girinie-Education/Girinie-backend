@@ -52,6 +52,7 @@ CUSTOM_APPS = [
     'common.apps.CommonConfig',
     'child_users.apps.ChildUsersConfig',
     'reward_calendar.apps.RewardCalendarConfig',
+    'chat.apps.ChatConfig',
 ]
 
 THIRD_PARTY_APPS = [
