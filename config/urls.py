@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/v1/child_users/', include('child_users.urls')),
     path('api/v1/calendar/', include('reward_calendar.urls')),
     path('api/v1/chat/', include('chat.urls')),
+    path('api/v1/logs/', include('logs.urls')),
     path('api/v1/home/', HomeView.as_view(), name='home'),
     # Swagger URL
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
