@@ -185,3 +185,27 @@ SESSION_COOKIE_SAMESITE = 'Lax'  # 또는 'None'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = 'Lax'  # 개발용
 CSRF_COOKIE_SECURE = False    # 개발용
+
+# 이메일 설정
+EMAIL_MODE = os.getenv('EMAIL_MODE', 'console')  # console, file, smtp
+
+if EMAIL_MODE == 'console':
+    # 개발용 - 콘솔에 출력
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+elif EMAIL_MODE == 'file':
+    # 개발용 - 파일로 저장
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+else:
+    # 실제 이메일 발송 (네이버 SMTP)
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.naver.com'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = 'noreply@girinie.com'
+
+# 백엔드 URL
+BACKEND_URL = 'http://127.0.0.1:8000'  # 배포 시 실제 도메인으로 변경
