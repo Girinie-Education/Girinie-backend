@@ -159,15 +159,20 @@ class ChatHistoryView(APIView):
     @swagger_auto_schema(
         operation_summary="채팅 기록 조회",
         operation_description="특정 아이의 최근 채팅 세션 기록을 조회합니다.",
-        manual_parameters=[
-            openapi.Parameter('child_id', openapi.IN_PATH, description="아이 ID", type=openapi.TYPE_INTEGER),
-        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            required=['child_id'],
+            properties={
+                'child_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='아이 ID'),
+            }
+        ),
         responses={
             200: ChatSessionSerializer(many=True),
             404: openapi.Response(description='아이를 찾을 수 없음'),
         }
     )
-    def get(self, request, child_id):
+    def post(self, request):
+        child_id = request.data.get('child_id')
         child = get_object_or_404(ChildUser, id=child_id)
         sessions = ChatSession.objects.filter(child=child).order_by('-created_at')[:10]
         serializer = ChatSessionSerializer(sessions, many=True)
