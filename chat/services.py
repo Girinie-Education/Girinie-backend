@@ -145,15 +145,15 @@ class ChatService:
         return score, feedback
     
     def check_level_up(self, session: ChatSession):
-        # 최근 10개 메시지의 평균 점수가 4.5점 이상이면 레벨업
+        # 최근 10개 메시지의 평균 점수가 4.0점 이상이면 레벨업
         recent_messages = session.messages.filter(
             sender='child',
             evaluation_score__isnull=False
         ).order_by('-created_at')[:10]
         
-        if len(recent_messages) >= 5:
+        if len(recent_messages) >= 10:
             avg_score = sum(msg.evaluation_score for msg in recent_messages) / len(recent_messages)
-            if avg_score >= 4.5:
+            if avg_score >= 4.0:
                 return True
         return False
     
