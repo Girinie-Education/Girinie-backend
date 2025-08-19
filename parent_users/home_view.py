@@ -391,21 +391,30 @@ class HomeView(APIView):
         responses={
             200: openapi.Response(
                 description="자녀별 홈 화면 정보 리스트",
-                examples={
-                    "application/json": [
-                        {
-                            "name": "지민",
-                            "age": 9,
-                            "streak": 3,
-                            "top_3_stickers": [
-                                {"sticker_type": 3, "label": "참 잘했어요", "count": 5},
-                                {"sticker_type": 5, "label": "정말 최고예요", "count": 3}
-                            ],
-                            "quote": "공부는 끝이 없는 여행이다.",
-                            "conversation": "How are you today?"
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'name': openapi.Schema(type=openapi.TYPE_STRING, example="지민"),
+                            'age': openapi.Schema(type=openapi.TYPE_INTEGER, example=7),
+                            'streak': openapi.Schema(type=openapi.TYPE_INTEGER, example=3),
+                            'top_3_stickers': openapi.Schema(
+                                type=openapi.TYPE_ARRAY,
+                                items=openapi.Schema(
+                                    type=openapi.TYPE_OBJECT,
+                                    properties={
+                                        'sticker_type': openapi.Schema(type=openapi.TYPE_INTEGER, example=3),
+                                        'label': openapi.Schema(type=openapi.TYPE_STRING, example="참 잘했어요"),
+                                        'count': openapi.Schema(type=openapi.TYPE_INTEGER, example=5)
+                                    }
+                                )
+                            ),
+                            'quote': openapi.Schema(type=openapi.TYPE_STRING, example="공부은 삶을 바꾼다."),
+                            'conversation': openapi.Schema(type=openapi.TYPE_STRING, example="안녕하세요! 오늘 하루는 어땠나요?")
                         }
-                    ]
-                }
+                    )
+                )
             ),
             204: "등록된 자녀가 없습니다.",
             401: "인증 필요"
