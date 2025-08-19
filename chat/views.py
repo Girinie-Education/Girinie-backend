@@ -12,6 +12,18 @@ from logs.models import LevelUpLog
 
 chat_service = ChatService()
 
+# 한국어 카테고리명을 영어 필드명으로 매핑
+CATEGORY_MAPPING = {
+    '질서': 'order',
+    '예절': 'manners', 
+    '자조': 'selfcare',
+    '청결': 'clean',
+    '감정조절': 'calm',
+    '존중': 'kindness',
+    '절약': 'saving',
+    '식습관': 'eating'
+}
+
 class ChatSessionView(APIView):
     @swagger_auto_schema(
         operation_summary="채팅 세션 시작",
@@ -38,18 +50,21 @@ class ChatSessionView(APIView):
         category = request.data.get('category')
         
         child = get_object_or_404(ChildUser, id=child_id)
-        current_level = getattr(child, f"{category}_level")
+        
+        # 한국어 카테고리명을 영어로 변환
+        english_category = CATEGORY_MAPPING.get(category, category)
+        current_level = getattr(child, f"{english_category}_level")
         
         # 기존 활성 세션 비활성화
-        ChatSession.objects.filter(child=child, category=category, is_active=True).update(is_active=False)
+        ChatSession.objects.filter(child=child, category=english_category, is_active=True).update(is_active=False)
         
         # 새 시나리오 생성
-        scenario = chat_service.create_scenario(child, category, current_level)
+        scenario = chat_service.create_scenario(child, english_category, current_level)
         
         # 새 세션 생성
         session = ChatSession.objects.create(
             child=child,
-            category=category,
+            category=english_category,
             current_level=current_level,
             scenario=scenario
         )
