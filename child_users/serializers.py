@@ -16,24 +16,3 @@ class ChildUserSerializer(serializers.ModelSerializer):
             'calm_level', 'kindness_level', 'saving_level', 'eating_level',
         ]
 
-    def validate(self, data):
-        instance = getattr(self, 'instance', None)
-
-        if instance:
-            # 기존 instance 값으로 average_level 재계산
-            levels = [
-                instance.order_level,
-                instance.manners_level,
-                instance.selfcare_level,
-                instance.clean_level,
-                instance.calm_level,
-                instance.kindness_level,
-                instance.saving_level,
-                instance.eating_level,
-            ]
-            data['average_level'] = round(sum(levels) / len(levels), 2)
-        else:
-            # 새 객체 생성 시 (POST), 기본값은 모두 0으로 간주
-            data['average_level'] = 0.0
-
-        return data

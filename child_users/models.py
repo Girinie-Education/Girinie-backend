@@ -8,7 +8,7 @@ class ChildUser(CommonModel):
     age = models.PositiveSmallIntegerField()
     color = models.CharField(max_length=30)
 
-    avatarUrl = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    avatarUrl = models.CharField(max_length=255, blank=True, null=True)
 
     parent = models.ForeignKey(
         ParentUser,
