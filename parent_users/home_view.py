@@ -1,3 +1,5 @@
+from tkinter.scrolledtext import example
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -396,9 +398,12 @@ class HomeView(APIView):
                     items=openapi.Schema(
                         type=openapi.TYPE_OBJECT,
                         properties={
+                            'id' : openapi.Schema(type=openapi.TYPE_INTEGER, example=2),
                             'name': openapi.Schema(type=openapi.TYPE_STRING, example="지민"),
                             'age': openapi.Schema(type=openapi.TYPE_INTEGER, example=7),
                             'streak': openapi.Schema(type=openapi.TYPE_INTEGER, example=3),
+                            "avatar": openapi.Schema(type=openapi.TYPE_STRING, example="/src/assets/icons/scarf/green.svg"),
+                            "color": openapi.Schema(type=openapi.TYPE_STRING, example="bg-[#7063EC]"),
                             'top_3_stickers': openapi.Schema(
                                 type=openapi.TYPE_ARRAY,
                                 items=openapi.Schema(
@@ -432,9 +437,12 @@ class HomeView(APIView):
 
         for child in children:
             child_data = {
+                "id": child.id,
                 "name": child.name,
                 "age": child.age,
-                "streak": child.streak
+                "streak": child.streak,
+                "avatar": child.avatarUrl,
+                "color": child.color,
             }
 
             reward_calendar = RewardCalendar.objects.filter(
